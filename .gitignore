@@ -1,7 +1,3 @@
-.gitignoner
-certs/
-certs-data/
-logs/
-nginx/
-mysql/
-wordpress/
+/data/mysql/mariadb/*
+/src
+/data/nginx-cache/*
