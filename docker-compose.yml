@@ -1,48 +1,54 @@
-version: "2.4"
-
+version: '3.6'
 services:
-web:
-  image: nginx:latest
-  container_name: nginx
-  restart: always
-  ports:
-    - "1180:80"
-  volumes:
-    - ./www:/www
-    - ./site.conf:/etc/nginx/conf.d/site.conf
-  links:
-    - php
-    - wordpress
-php:
-  image: php:7.4-fpm
-  container_name: php-fpm
-  volumes:
-    - ./www:/www
-  links:
-    - db
-db:
-  image: mysql:latest
-  volumes:
-    - ./mysql:/var/lib/mysql
-  container_name: mysql
-  restart: always
-  environment:
-    MYSQL_ROOT_PASSWORD: "dNL9b?A-Wbq3rA_*"
-    MYSQL_PORT: 3306
-    MYSQL_USER: conddiz
-    MYSQL_PASSWORD: "dx{M6%.VVTnnKxTR"
-    MYSQL_DATABASE: wordpress
-  ports:
-    - "3000:3306"
-wordpress:
-  image: wordpress:php7.4-fpm
-  volumes:
-    - ./www:/www/wordpress
-  environment:
-    WORDPRESS_DB_NAME: wordpress
-    WORDPRESS_TABLE_PREFIX: cddz_
-    WORDPRESS_DB_HOST: localhost
-    WORDPRESS_DB_USER: conddiz
-    WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
-  links:
-    - db
+
+  wordpress:
+    image: wordpress:${WORDPRESS_VERSION:-php7.3-fpm}
+    container_name: wordpress
+    volumes:
+      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
+      - ./wordpress:/var/www/html
+    environment:
+      - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME:-wordpress}
+      - WORDPRESS_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX:-wp_}
+      - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST:-mysql}
+      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER:-root}
+      - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD:-password}
+    depends_on:
+      - mysql
+    restart: always
+
+  mysql:
+    image: mariadb:${MARIADB_VERSION:-latest}
+    container_name: mysql
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-password}
+      - MYSQL_USER=${MYSQL_USER:-root}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-password}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-wordpress}
+    restart: always
+
+  nginx:
+    image: nginx:${NGINX_VERSION:-latest}
+    container_name: nginx
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ${NGINX_CONF_DIR:-./nginx}:/etc/nginx/conf.d
+      - ${NGINX_LOG_DIR:-./logs/nginx}:/var/log/nginx
+      - ${WORDPRESS_DATA_DIR:-./wordpress}:/var/www/html
+      - ${SSL_CERTS_DIR:-./certs}:/etc/letsencrypt
+      - ${SSL_CERTS_DATA_DIR:-./certs-data}:/data/letsencrypt
+    depends_on:
+      - wordpress
+    restart: always
+
+  adminer:
+    image: adminer
+    restart: always
+    links:
+      - mysql
+    ports:
+      - 8080:8080
