@@ -58,13 +58,12 @@ services:
     restart: always
     volumes:
       - ./mariadb:/var/lib/mysql      
-    environment: 
-      MYSQL_HOST: localhost
+    environment:
+      MYSQL_ROOT_PASSWORD: password       
       MYSQL_PORT: 3306
       MYSQL_USER: conddiz
       MYSQL_PASSWORD: password
-      MYSQL_DATABASE: wordpress
-      MYSQL_RANDOM_ROOT_PASSWORD: yes      
+      MYSQL_DATABASE: wordpress            
     env_file: .env
     ports:
       - 3000:3306
