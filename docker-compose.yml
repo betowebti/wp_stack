@@ -1,83 +1,46 @@
-#
-# CONDDIZ Docker Compose Configuration File
-#
-# When updating, you will be prompted to replace this file with a new
-# version; you should do this whenever possible to take advantage of
-# new updates.
-#
-# If you need to customize this file, you can create a new file named:
-#   docker-compose.override.yml
-# with any changes you need to make.
-#
 version: "2.4"
 
 services:
-  nginx:
-    #image: nginx:latest
-    build: ./nginx/
-    ports:
-      - ${HTTP_PORT}:80
-      - ${HTTPS_PORT}:443
-    volumes_from:
-      - php
-    volumes:
-      - ../nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx:/etc/nginx/conf.d
-      - ./logs/nginx:/var/log/nginx
-      - ./wordpress:/var/www/html
-    links:
-      - php
-    restart: always
-    env_file: .env
-
-  php:
-      build: ./php/
-      volumes:
-        - ./www:/www
-      links:
-        - mysql    
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    volumes:
-      - ./pma:/pma
-    links:
-      - mysql
-    ports:
-      - ${HTTP_PORT}:80
-      - ${HTTPS_PORT}:443
-    environment:             
-      PMA_HOST: 127.0.0.1
-      PMA_ARBITRARY: 1
-    depends_on:
-      - mysql
-
-  mysql:
-    image: mariadb:latest
-    restart: always
-    volumes:
-      - ./mariadb:/var/lib/mysql      
-    environment:
-      MYSQL_ROOT_PASSWORD: password       
-      MYSQL_PORT: 3306
-      MYSQL_USER: conddiz
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: wordpress            
-    env_file: .env
-    ports:
-      - 3000:3306
-
+web:
+  image: nginx:latest
+  container_name: nginx
+  restart: always
+  ports:
+    - "1180:80"
+  volumes:
+    - ./www:/www
+    - ./site.conf:/etc/nginx/conf.d/site.conf
+  links:
+    - php
+    - wordpress
+php:
+  image: php:7.4-fpm
+  container_name: php-fpm
+  volumes:
+    - ./www:/www
+  links:
+    - db
+db:
+  image: mysql:8
+  container_name: mysql
+  restart: always
+  environment:
+    MYSQL_ROOT_PASSWORD: "dNL9b?A-Wbq3rA_*"
+    MYSQL_PORT: 3306
+    MYSQL_USER: conddiz
+    MYSQL_PASSWORD: "dx{M6%.VVTnnKxTR"
+    MYSQL_DATABASE: wordpress
+  ports:
+    - "3000:3306"
 wordpress:
-    image: wordpress:php7.4-fpm
-    volumes:
-      - ./wordpress:/www/wordpress
-    environment:
-      WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_TABLE_PREFIX: cddz_
-      WORDPRESS_DB_HOST: localhost
-      WORDPRESS_DB_USER: conddiz
-      WORDPRESS_DB_PASSWORD: password
-    links:
-      - mysql
-    env_file: .env
+  image: wordpress:php7.4-fpm
+  volumes:
+    - ./www:/www/wordpress
+  environment:
+    WORDPRESS_DB_NAME: wordpress
+    WORDPRESS_TABLE_PREFIX: cddz_
+    WORDPRESS_DB_HOST: localhost
+    WORDPRESS_DB_USER: conddiz
+    WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
+  links:
+    - db
