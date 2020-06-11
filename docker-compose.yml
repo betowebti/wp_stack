@@ -21,7 +21,9 @@ php:
   links:
     - db
 db:
-  image: mysql:8
+  image: mysql:latest
+  volumes:
+    - ./mysql:/var/lib/mysql
   container_name: mysql
   restart: always
   environment:
