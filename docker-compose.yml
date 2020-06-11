@@ -16,8 +16,8 @@ services:
     #image: nginx:latest
     build: ./nginx/
     ports:
-      - HTTP_PORT:80
-      - HTTPS_PORT:443
+      - ${HTTP_PORT}:80
+      - ${HTTPS_PORT}:443
     volumes_from:
       - php
     volumes:
@@ -45,15 +45,13 @@ services:
     links:
       - mysql
     ports:
-      - HTTP_PORT:80
-      - HTTPS_PORT:443
+      - ${HTTP_PORT}:80
+      - ${HTTPS_PORT}:443
     environment:  
-      MYSQL_HOST=localhost
-      MYSQL_PORT=3306
-      MYSQL_USER=conddiz
-      MYSQL_PASSWORD=GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL
-      MYSQL_DATABASE=wordpress
-      MYSQL_RANDOM_ROOT_PASSWORD=yes
+      MYSQL_HOST:localhost
+      MYSQL_PORT:3306
+      MYSQL_USER:conddiz
+      MYSQL_PASSWORD:GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL      
       PMA_HOST:127.0.0.1
       PMA_ARBITRARY:1
     depends_on:
@@ -65,13 +63,13 @@ services:
     volumes:
       - ./mariadb:/var/lib/mysql      
     environment: 
-      MYSQL_HOST=localhost
-      MYSQL_PORT=3306
-      MYSQL_USER=conddiz
-      MYSQL_PASSWORD=GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL
-      MYSQL_DATABASE=wordpress
-      MYSQL_RANDOM_ROOT_PASSWORD=yes
-      MYSQL_SLOW_QUERY_LOG=0
+      MYSQL_HOST:localhost
+      MYSQL_PORT:3306
+      MYSQL_USER:conddiz
+      MYSQL_PASSWORD:GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL
+      MYSQL_DATABASE:wordpress
+      MYSQL_RANDOM_ROOT_PASSWORD:yes
+      MYSQL_SLOW_QUERY_LOG:0
     env_file: .env
     ports:
       - 3000:3306
@@ -81,11 +79,11 @@ wordpress:
     volumes:
       - ./wordpress:/www/wordpress
     environment:
-      WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_TABLE_PREFIX: cddz_
-      WORDPRESS_DB_HOST: localhost
-      WORDPRESS_DB_USER: conddiz
-      WORDPRESS_DB_PASSWORD: GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL
+      WORDPRESS_DB_NAME:wordpress
+      WORDPRESS_TABLE_PREFIX:cddz_
+      WORDPRESS_DB_HOST:localhost
+      WORDPRESS_DB_USER:conddiz
+      WORDPRESS_DB_PASSWORD:GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL
     links:
       - mysql
     env_file: .env
