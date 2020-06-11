@@ -1,38 +1,37 @@
 FROM php:7.4-fpm
-LABEL maintainer="dev@chialab.io"
+LABEL maintainer="roberto@conddiz.com"
 
-# Download script to install PHP extensions and dependencies
-ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+RUN echo 'deb http://httpredir.debian.org/debian jessie contrib' >> /etc/apt/sources.list
 
-RUN chmod uga+x /usr/local/bin/install-php-extensions && sync
+RUN apt-get update
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y --force-yes libssl-dev curl  libcurl4-gnutls-dev libxml2-dev libicu-dev libmcrypt4 libmemcached11 openssl
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update -q \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -qq -y \
-      curl \
-      git \
-      zip unzip \
-    && install-php-extensions \
-      bcmath \
-      bz2 \
-      calendar \
-      exif \
-      gd \
-      intl \
-      ldap \
-      memcached \
-      mysqli \
-      opcache \
-      pdo_mysql \
-      pdo_pgsql \
-      pgsql \
-      redis \
-      soap \
-      xsl \
-      zip \
-      sockets
-# already installed:
-#      iconv \
-#      mbstring \
+#CONFIGURAÇÕES DO OPCACHE
+RUN docker-php-ext-install opcache
+
+#CONFIGURAÇÕES DO APCU
+RUN pecl install apcu-5.1.5 && docker-php-ext-enable apcu
+
+#LIBS EXTRAS
+RUN docker-php-ext-install bcmath
+RUN apt-get install -y libbz2-dev
+RUN docker-php-ext-install bz2
+RUN docker-php-ext-install mbstring
+RUN apt-get install -y libpq-dev
+RUN apt-get install -y libicu-dev
+RUN docker-php-ext-install intl
+RUN docker-php-ext-install redis
+
+#GD
+RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng16-16
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-install gd
+
+#PDO - CUSTOMIZAR A SEU DISPOR
+RUN docker-php-ext-install pdo_mysql
+
+EXPOSE 9000
+CMD ["php-fpm"]
 
 # Install Composer.
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
