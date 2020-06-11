@@ -59,12 +59,12 @@ services:
     volumes:
       - ./mariadb:/var/lib/mysql      
     environment: 
-      - MYSQL_HOST: localhost
-      - MYSQL_PORT: 3306
-      - MYSQL_USER: conddiz
-      - MYSQL_PASSWORD: GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL
-      - MYSQL_DATABASE: wordpress
-      - MYSQL_RANDOM_ROOT_PASSWORD: yes      
+      MYSQL_HOST: localhost
+      MYSQL_PORT: 3306
+      MYSQL_USER: conddiz
+      MYSQL_PASSWORD: GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL
+      MYSQL_DATABASE: wordpress
+      MYSQL_RANDOM_ROOT_PASSWORD: yes      
     env_file: .env
     ports:
       - 3000:3306
