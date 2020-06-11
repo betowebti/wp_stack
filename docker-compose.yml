@@ -62,7 +62,7 @@ services:
       MYSQL_HOST: localhost
       MYSQL_PORT: 3306
       MYSQL_USER: conddiz
-      MYSQL_PASSWORD: GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL
+      MYSQL_PASSWORD: password
       MYSQL_DATABASE: wordpress
       MYSQL_RANDOM_ROOT_PASSWORD: yes      
     env_file: .env
@@ -78,7 +78,7 @@ wordpress:
       WORDPRESS_TABLE_PREFIX: cddz_
       WORDPRESS_DB_HOST: localhost
       WORDPRESS_DB_USER: conddiz
-      WORDPRESS_DB_PASSWORD: GMlaiXh7BnWlfZQZyMbYwy-1u2l0cfpL
+      WORDPRESS_DB_PASSWORD: password
     links:
       - mysql
     env_file: .env
