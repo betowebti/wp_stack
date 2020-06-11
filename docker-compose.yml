@@ -33,7 +33,7 @@ services:
   php:
       build: ./php/
       volumes:
-        - ./php:/php
+        - ./www:/www
       links:
         - mysql    
 
