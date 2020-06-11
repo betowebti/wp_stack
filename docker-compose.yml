@@ -38,7 +38,7 @@ services:
         - mysql    
 
   phpmyadmin:
-    image: phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin
     restart: always
     volumes:
       - ./pma:/pma
