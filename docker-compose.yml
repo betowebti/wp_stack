@@ -27,7 +27,7 @@ services:
         restart: always
         links:
             - php
-            - MYSQL
+            - mysql
 
     php:
         build: ./.docker/php-fpm
@@ -64,5 +64,4 @@ services:
             - PMA_HOST=${MYSQL_HOST}
         restart: always
         depends_on:
-            - MYSQL
-
+            - mysql
