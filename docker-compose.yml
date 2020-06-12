@@ -27,7 +27,7 @@ services:
         restart: always
         links:
             - php
-            - mariadb
+            - MYSQL
 
     php:
         build: ./.docker/php-fpm
@@ -45,11 +45,12 @@ services:
             - .:/application
         restart: always
         environment:
-            - MARIADB_ROOT_USER=${MYSQL_ROOT_USER}
-            - MARIADB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-            - MARIADB_DATABASE=${MYSQL_DATABASE}
-            - MARIADB_USER=${MYSQL_USER}
-            - MARIADB_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_HOST=${MYSQL_HOST}
+            - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
         ports:            
             - "1182:3306"
         
@@ -63,5 +64,5 @@ services:
             - PMA_HOST=${MYSQL_HOST}
         restart: always
         depends_on:
-            - mariadb
+            - MYSQL
 
