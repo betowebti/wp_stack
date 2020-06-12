@@ -1,62 +1,46 @@
 version: "2.4"
 
 services:
-  redis:
-    image: redis:alpine
-    container_name: redis
-    restart: always
-    ports:
-      - "6379:6379"
-
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    restart: always
-    volumes:      
-      - ./data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: "dNL9b?A-Wbq3rA_*"
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: conddiz
-      MYSQL_PASSWORD: "dx{M6%.VVTnnKxTR"
-    ports:
-      - "1182:3306"
-  
-  php:
-    image: php:7.4-fpm
-    container_name: php-fpm    
-    restart: always
-    volumes:
-      - ./php-uploads.ini:/etc/php.ini                
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    depends_on:
-      - php
-    restart: always
-    volumes:      
-      - ./nginx/default.conf:/etc/nginx/conf.d/
-      - ./wordpress:/var/www/html      
-      - ./logs:/var/log/nginx    
-    ports:
-      - 1180:80          
-    environment:
-       DOMAINS: 'localhost'
-
-  wordpress:
-    image: wordpress:php7.4-fpm
-    container_name: wordpress
-    depends_on:
-      - mysql
-      - php
-    restart: always
-    volumes:           
-      - ./wordpress:/var/www/html
-    environment:
-      WORDPRESS_DB_HOST: localhost
-      WORDPRESS_DB_USER: conddiz
-      WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"  
-  
- 
-    
+web:
+  image: nginx:latest
+  container_name: nginx
+  restart: always
+  ports:
+    - "1180:80"
+  volumes:
+    - ./www:/www
+    - ./site.conf:/etc/nginx/conf.d/site.conf
+  links:
+    - php
+    - wordpress
+php:
+  image: php:7.4-fpm
+  container_name: php-fpm
+  volumes:
+    - ./www:/www
+  links:
+    - db
+db:
+  image: mysql:8.0
+  container_name: mysql
+  restart: always
+  environment:
+    MYSQL_ROOT_PASSWORD: "dNL9b?A-Wbq3rA_*"
+    MYSQL_PORT: 3306
+    MYSQL_USER: conddiz
+    MYSQL_PASSWORD: "dx{M6%.VVTnnKxTR"
+    MYSQL_DATABASE: wordpress
+  ports:
+    - "1182:3306"
+wordpress:
+  image: wordpress:php7.4-fpm
+  volumes:
+    - ./www:/www/wordpress
+  environment:
+    WORDPRESS_DB_NAME: wordpress
+    WORDPRESS_TABLE_PREFIX: cddz_
+    WORDPRESS_DB_HOST: localhost
+    WORDPRESS_DB_USER: conddiz
+    WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
+  links:
+    - db
