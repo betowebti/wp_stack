@@ -37,9 +37,12 @@ services:
             - ./src:/var/www/html
             - ./data/nginx-cache:/var/www/nginx-cache
 
-    mariadb:
-        image: 'mariadb:latest'
-        container_name: mariadb
+    mysql:
+        image: mysql:8.0
+        container_name: mysql
+        working_dir: /application
+        volumes:
+            - .:/application
         restart: always
         environment:
             - MARIADB_ROOT_USER=${MYSQL_ROOT_USER}
@@ -47,10 +50,9 @@ services:
             - MARIADB_DATABASE=${MYSQL_DATABASE}
             - MARIADB_USER=${MYSQL_USER}
             - MARIADB_PASSWORD=${MYSQL_PASSWORD}
-        ports:
-            - '3306:3306'
-        volumes:
-            - ./data/mysql:/mariadb
+        ports:            
+            - "1182:3306"
+        
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin

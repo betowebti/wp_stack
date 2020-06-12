@@ -1,37 +1,17 @@
-FROM php:7.4-fpm
-LABEL maintainer="roberto@conddiz.com"
+FROM phpdockerio/php74-fpm:latest
 
-RUN echo 'deb http://httpredir.debian.org/debian jessie contrib' >> /etc/apt/sources.list
+# Fix debconf warnings upon build
+ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y --force-yes libssl-dev curl  libcurl4-gnutls-dev libxml2-dev libicu-dev libmcrypt4 libmemcached11 openssl
+# Install selected extensions and other stuff
+RUN apt-get update \
+    && apt-get -y --no-install-recommends install  php-memcached php7.4-mysql php-redis php7.4-sqlite3 php7.4-bcmath php7.4-bz2 php7.4-enchant php7.4-gd php7.4-gmp php-igbinary php-imagick php7.4-imap php7.4-interbase php7.4-intl php7.4-ldap php-msgpack php7.4-pspell php7.4-snmp php7.4-soap php-ssh2 php7.4-sybase php7.4-tidy php7.4-xmlrpc php7.4-xsl php-yaml \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-#CONFIGURAÇÕES DO OPCACHE
-RUN docker-php-ext-install opcache
-
-#CONFIGURAÇÕES DO APCU
-RUN pecl install apcu-5.1.5 && docker-php-ext-enable apcu
-
-#LIBS EXTRAS
-RUN docker-php-ext-install bcmath
-RUN apt-get install -y libbz2-dev
-RUN docker-php-ext-install bz2
-RUN docker-php-ext-install mbstring
-RUN apt-get install -y libpq-dev
-RUN apt-get install -y libicu-dev
-RUN docker-php-ext-install intl
-RUN docker-php-ext-install redis
-
-#GD
-RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng16-16
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
-RUN docker-php-ext-install gd
-
-#PDO - CUSTOMIZAR A SEU DISPOR
-RUN docker-php-ext-install pdo_mysql
-
-EXPOSE 9000
-CMD ["php-fpm"]
+# Install git
+RUN apt-get update \
+    && apt-get -y install git \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # Install Composer.
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
