@@ -23,18 +23,11 @@ services:
       - "1182:3306"
   
   php:
-    image: wordpress:php7.4-fpm
-    container_name: wordpress
-    depends_on:
-      - mysql
+    image: php:7.4-fpm
+    container_name: php-fpm    
     restart: always
     volumes:
-      - ./php-uploads.ini:/usr/local/etc/php/conf.d/uploads.ini      
-      - ./wordpress:/var/www/html
-    environment:
-      WORDPRESS_DB_HOST: localhost
-      WORDPRESS_DB_USER: conddiz
-      WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
+      - ./php-uploads.ini:/etc/php.ini                
 
   nginx:
     image: nginx:latest
@@ -43,13 +36,27 @@ services:
       - php
     restart: always
     volumes:      
-      - ./nginx:/etc/nginx/conf.d/
+      - ./nginx/default.conf:/etc/nginx/conf.d/
       - ./wordpress:/var/www/html      
       - ./logs:/var/log/nginx    
     ports:
       - 1180:80          
     environment:
-       DOMAINS: 'localhost'  
+       DOMAINS: 'localhost'
+
+  wordpress:
+    image: wordpress:php7.4-fpm
+    container_name: wordpress
+    depends_on:
+      - mysql
+      - php
+    restart: always
+    volumes:           
+      - ./wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: localhost
+      WORDPRESS_DB_USER: conddiz
+      WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"  
   
  
     
