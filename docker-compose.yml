@@ -32,7 +32,7 @@ services:
       - ./php-uploads.ini:/usr/local/etc/php/conf.d/uploads.ini      
       - ./wordpress:/var/www/html
     environment:
-      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_HOST: localhost
       WORDPRESS_DB_USER: conddiz
       WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
 
@@ -43,7 +43,7 @@ services:
       - php
     restart: always
     volumes:      
-      - ./default.conf:/etc/nginx/conf.d/
+      - ./default.conf:/etc/nginx/conf.d/default.conf
       - ./wordpress:/var/www/html      
       - ./logs:/var/log/nginx    
     ports:
