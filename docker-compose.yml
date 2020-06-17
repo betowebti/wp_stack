@@ -39,7 +39,7 @@ services:
       - ./wordpress:/var/www/html      
       - ./logs:/var/log/nginx    
     ports:
-      - 1180:80          
+      - 1180:81          
     environment:
        DOMAINS: 'localhost'
     links: 
@@ -57,6 +57,4 @@ services:
     environment:
       WORDPRESS_DB_HOST: localhost
       WORDPRESS_DB_USER: conddiz
-      WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
-    ports:
-       - "1181:80"
+      WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"    
