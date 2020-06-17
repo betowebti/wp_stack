@@ -18,7 +18,8 @@ web:
 mysql:
   image: mysql:8.0
   container_name: mysql
-  ./db-data:/var/lib/mysql  
+  volumes:
+    - ./db-data:/var/lib/mysql  
   environment:
     MYSQL_ROOT_PASSWORD: "dNL9b?A-Wbq3rA_*"
     MYSQL_PORT: 3306
