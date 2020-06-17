@@ -1,0 +1,46 @@
+version: "2.4"
+
+services:
+web:
+  image: nginx:latest
+  container_name: nginx
+  restart: always
+  ports:
+    - "1180:80"
+  volumes:
+    - ./nginx:/etc/nginx/conf.d
+    - ./logs/nginx:/var/log/nginx
+    - ./wordpress:/var/www/html
+  links:
+    - wordpress
+  restart: always
+
+mysql:
+  image: mysql:8.0
+  container_name: mysql
+  ./db-data:/var/lib/mysql  
+  environment:
+    MYSQL_ROOT_PASSWORD: "dNL9b?A-Wbq3rA_*"
+    MYSQL_PORT: 3306
+    MYSQL_USER: conddiz
+    MYSQL_PASSWORD: "dx{M6%.VVTnnKxTR"
+    MYSQL_DATABASE: wordpress
+  ports:
+    - "1182:3306"
+  restart: always  
+wordpress:
+  container_name: wordpress
+  image: wordpress:5.4.2-php7.4-fpm
+  ports:
+    - '9007:9007'
+  volumes:
+    - ./wordpress:/var/www/html
+  environment:
+    WORDPRESS_DB_NAME: wordpress
+    WORDPRESS_TABLE_PREFIX: cddz_
+    WORDPRESS_DB_HOST: localhost
+    WORDPRESS_DB_USER: conddiz
+    WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
+  links:
+    - mysql
+  restart: always
