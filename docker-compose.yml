@@ -8,22 +8,17 @@ web:
   ports:
     - "1180:80"
   volumes:
-    - ./www:/www
-    - ./site.conf:/etc/nginx/conf.d/site.conf
+    - ./nginx:/etc/nginx/conf.d
+    - ./logs/nginx:/var/log/nginx
+    - ./wordpress:/var/www/html
   links:
-    - php
     - wordpress
-php:
-  image: php:7.4-fpm
-  container_name: php-fpm
-  volumes:
-    - ./www:/www
-  links:
-    - db
-db:
+  restart: always
+
+mysql:
   image: mysql:8.0
   container_name: mysql
-  restart: always
+  ./db-data:/var/lib/mysql  
   environment:
     MYSQL_ROOT_PASSWORD: "dNL9b?A-Wbq3rA_*"
     MYSQL_PORT: 3306
@@ -32,10 +27,14 @@ db:
     MYSQL_DATABASE: wordpress
   ports:
     - "1182:3306"
+  restart: always  
 wordpress:
-  image: wordpress:php7.4-fpm
+  container_name: wordpress
+  image: wordpress:5.4.2-php7.4-fpm
+  ports:
+    - '9007:9007'
   volumes:
-    - ./www:/www/wordpress
+    - ./wordpress:/var/www/html
   environment:
     WORDPRESS_DB_NAME: wordpress
     WORDPRESS_TABLE_PREFIX: cddz_
@@ -43,4 +42,7 @@ wordpress:
     WORDPRESS_DB_USER: conddiz
     WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
   links:
-    - db
+    - mysql
+  restart: always
+  
+   
