@@ -4,7 +4,6 @@ services:
 web:
   image: nginx:latest
   container_name: nginx
-  restart: always
   ports:
     - "1180:80"
   volumes:
@@ -14,7 +13,6 @@ web:
   links:
     - wordpress
   restart: always
-
 mysql:
   image: mysql:8.0
   container_name: mysql
@@ -33,7 +31,7 @@ wordpress:
   container_name: wordpress
   image: wordpress:5.4.2-php7.4-fpm
   ports:
-    - '9007:9007'
+    - '1183:9009'
   volumes:
     - ./wordpress:/var/www/html
   environment:
