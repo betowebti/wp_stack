@@ -23,13 +23,13 @@ services:
       - "1182:3306"
      
   nginx-php-fpm:
-      container_name: nginx-php-fpm
-      image: richarvey/nginx-php-fpm:latest
-      restart: always      
+    container_name: nginx-php-fpm
+    image: richarvey/nginx-php-fpm:latest
+    restart: always
+    environment:
+      - PHP_MEM_LIMIT:256M
     ports:
       - 1180:80          
-    environment:
-       DOMAINS: 'localhost'
     links: 
       - wordpress
 
