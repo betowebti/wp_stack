@@ -27,9 +27,7 @@ services:
     image: richarvey/nginx-php-fpm:latest
     restart: always
     environment:
-      - PHP_MEM_LIMIT:256M
-    ports:
-      - 1180:80          
+      - PHP_MEM_LIMIT:256M            
     links: 
       - wordpress
 
@@ -44,4 +42,6 @@ services:
     environment:
       WORDPRESS_DB_HOST: localhost
       WORDPRESS_DB_USER: conddiz
-      WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"    
+      WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
+    ports:
+      - 1180:80    
