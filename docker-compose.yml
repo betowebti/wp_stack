@@ -26,7 +26,8 @@ services:
     image: php:7.4-fpm
     container_name: php-fpm    
     restart: always
-                
+    volumes:      
+      - ./nginx:/etc/php-fpm.d
 
   nginx:
     image: nginx:latest
@@ -35,11 +36,11 @@ services:
       - php
     restart: always
     volumes:      
-      - ./nginx/default.conf:/etc/nginx/conf.d/
+      - ./nginx:/etc/nginx/conf.d/
       - ./wordpress:/var/www/html      
       - ./logs:/var/log/nginx    
     ports:
-      - 1180:81          
+      - 1180:80          
     environment:
        DOMAINS: 'localhost'
     links: 
