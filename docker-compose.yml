@@ -34,7 +34,8 @@ services:
     depends_on:
       - php
     restart: always
-    volumes:      
+    volumes:
+      - ./nginx:/etc/nginx/conf.d      
       - ./wordpress:/var/www/html      
       - ./logs:/var/log/nginx    
     ports:
