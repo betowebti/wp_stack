@@ -27,7 +27,10 @@ services:
     image: richarvey/nginx-php-fpm:latest
     restart: always
     environment:
-      - PHP_MEM_LIMIT:256M            
+      - PHP_MEM_LIMIT:256M
+      - WEBROOT:/var/www/html/wordpress
+    ports:
+        - 1180:80              
     links: 
       - wordpress
 
@@ -36,12 +39,9 @@ services:
     container_name: wordpress
     depends_on:
       - mysql      
-    restart: always
-    volumes:           
-      - ./wordpress:/var/www/html/wordpress
+    restart: always    
     environment:
       WORDPRESS_DB_HOST: localhost
       WORDPRESS_DB_USER: conddiz
       WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
-    ports:
-      - 1180:80    
+      
