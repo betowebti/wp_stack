@@ -30,7 +30,7 @@ services:
       - PHP_MEM_LIMIT:512M
       - WEBROOT:/var/www/html/wordpress
     ports:
-        - 1180:80              
+        - 1181:80              
     links: 
       - wordpress
 
