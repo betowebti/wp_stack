@@ -39,8 +39,10 @@ services:
   wordpress:
     image: wordpress:php7.4-fpm
     container_name: wordpress
+    volumes:
+      - ./wordpress:/var/www/html
     ports:
-      - 9080:9000
+      - 9009:9009
     depends_on:
       - mysql      
     restart: always
