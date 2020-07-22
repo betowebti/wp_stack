@@ -27,7 +27,7 @@ services:
     image: richarvey/nginx-php-fpm:latest
     restart: always
     environment:
-      - PHP_MEM_LIMIT:256M
+      - PHP_MEM_LIMIT:512M
       - WEBROOT:/var/www/html/wordpress
     ports:
         - 1180:80              
