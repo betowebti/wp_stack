@@ -24,11 +24,8 @@ services:
      
   nginx:
     container_name: nginx
-    #image: richarvey/nginx-php-fpm:latest
-    image: nginx:latest
+    image: richarvey/nginx-php-fpm:latest
     volumes:    
-      - ./nginx:/etc/nginx/conf.d
-      - ./logs/nginx:/var/log/nginx
       - ./wordpress:/var/www/html/wordpress
     restart: always    
     ports:
