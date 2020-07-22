@@ -20,17 +20,19 @@ services:
       MYSQL_USER: conddiz
       MYSQL_PASSWORD: "dx{M6%.VVTnnKxTR"
     ports:
-      - "1182:3306"
+      - "1181:3306"
      
-  nginx-php-fpm:
-    container_name: nginx-php-fpm
-    image: richarvey/nginx-php-fpm:latest
-    restart: always
-    environment:
-      - PHP_MEM_LIMIT:512M
-      - WEBROOT:/var/www/html/wordpress
+  nginx:
+    container_name: nginx
+    #image: richarvey/nginx-php-fpm:latest
+    image: nginx/latest
+    volumes:    
+      - ./nginx:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+      - ./wordpress:/var/www/html/wordpress
+    restart: always    
     ports:
-        - 1181:80              
+        - 1180:80              
     links: 
       - wordpress
 
@@ -38,12 +40,11 @@ services:
     image: wordpress:php7.4-fpm
     container_name: wordpress
     ports:
-      - 1180:80
+      - 9080:9000
     depends_on:
       - mysql      
     restart: always
-    volumes:           
-      - ./wordpress:/var/www/html/wordpress
+    
     environment:
       WORDPRESS_DB_HOST: localhost
       WORDPRESS_DB_USER: conddiz
