@@ -20,7 +20,7 @@ services:
       MYSQL_USER: conddiz
       MYSQL_PASSWORD: "dx{M6%.VVTnnKxTR"
     ports:
-      - "1181:3306"
+      - "3306:3306"
      
   nginx:
     container_name: nginx
@@ -29,7 +29,7 @@ services:
       - ./wordpress:/var/www/html/wordpress
     restart: always    
     ports:
-        - 1180:80              
+        - 80:80              
     links: 
       - wordpress
 
