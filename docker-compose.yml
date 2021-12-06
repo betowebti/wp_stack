@@ -6,7 +6,7 @@ services:
     container_name: redis
     restart: always
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
   mysql:
     image: mysql:8.0
@@ -15,12 +15,12 @@ services:
     volumes:      
       - ./data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: "dNL9b?A-Wbq3rA_*"
+      MYSQL_ROOT_PASSWORD: "dx{M6%.VVTnnKxTR"
       MYSQL_DATABASE: wordpress
-      MYSQL_USER: conddiz
-      MYSQL_PASSWORD: "dx{M6%.VVTnnKxTR"
+      MYSQL_USER: cdz_agent
+      MYSQL_PASSWORD: "-bguZE4^hYEu"
     ports:
-      - "3306:3306"
+      - "3307:3306"
      
   nginx:
     container_name: nginx
@@ -29,7 +29,7 @@ services:
       - ./wordpress:/var/www/html/wordpress
     restart: always    
     ports:
-        - 80:80              
+        - 1000:80              
     links: 
       - wordpress
 
@@ -46,6 +46,6 @@ services:
     
     environment:
       WORDPRESS_DB_HOST: localhost
-      WORDPRESS_DB_USER: conddiz
-      WORDPRESS_DB_PASSWORD: "dx{M6%.VVTnnKxTR"
+      WORDPRESS_DB_USER: cdz_agent
+      WORDPRESS_DB_PASSWORD: "-bguZE4^hYEu"
       
